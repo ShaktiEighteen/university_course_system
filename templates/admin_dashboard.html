@@ -1,0 +1,416 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Portal - System Administration{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="dashboard-title">
+            <h1>System Administration Portal</h1>
+            <div class="dashboard-subtitle">
+                Course Catalog, Academic Scheduling, Faculty, Students &amp; Resource Management
+            </div>
+        </div>
+        <div>
+            <span class="role-tag role-admin" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+                System Administrator
+            </span>
+        </div>
+    </div>
+
+    <!-- METRICS GRID -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-icon" style="background: var(--primary-light); color: var(--primary);">👨‍🎓</div>
+            <div>
+                <div id="stat-students" class="metric-value">0</div>
+                <div class="metric-label">Enrolled Students</div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon" style="background: var(--success-light); color: var(--success);">👨‍🏫</div>
+            <div>
+                <div id="stat-instructors" class="metric-value">0</div>
+                <div class="metric-label">Faculty Members</div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon" style="background: var(--warning-light); color: var(--warning);">🏛️</div>
+            <div>
+                <div id="stat-departments" class="metric-value">0</div>
+                <div class="metric-label">Departments</div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon" style="background: var(--info-light); color: var(--info);">📚</div>
+            <div>
+                <div id="stat-courses" class="metric-value">0</div>
+                <div class="metric-label">Total Courses</div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon" style="background: var(--primary-light); color: var(--primary);">📅</div>
+            <div>
+                <div id="stat-sections" class="metric-value">0</div>
+                <div class="metric-label">Active Sections</div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon" style="background: var(--success-light); color: var(--success);">📝</div>
+            <div>
+                <div id="stat-enrollments" class="metric-value">0</div>
+                <div class="metric-label">Total Registrations</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS NAVIGATION -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="tab-admin-courses">📚 Courses &amp; Prereqs</button>
+        <button class="tab-btn" data-tab="tab-admin-sections">📅 Section Scheduling</button>
+        <button class="tab-btn" data-tab="tab-admin-students">👨‍🎓 Students</button>
+        <button class="tab-btn" data-tab="tab-admin-instructors">👨‍🏫 Faculty / Instructors</button>
+        <button class="tab-btn" data-tab="tab-admin-departments">🏛️ Departments</button>
+    </div>
+
+    <!-- TAB 1: COURSES -->
+    <div id="tab-admin-courses" class="tab-pane active">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 700;">Course Catalog Management</h3>
+                <button class="btn btn-primary btn-sm" onclick="openModal('create-course-modal')">
+                    + Add New Course
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Title</th>
+                            <th>Department</th>
+                            <th>Credits</th>
+                            <th>Prerequisites</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-courses-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: SECTIONS -->
+    <div id="tab-admin-sections" class="tab-pane">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 700;">Course Section Scheduling (Conflict Checking Active)</h3>
+                <button class="btn btn-primary btn-sm" onclick="openModal('create-section-modal')">
+                    + Schedule Section
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Sec</th>
+                            <th>Title</th>
+                            <th>Time Slot</th>
+                            <th>Classroom</th>
+                            <th>Instructor</th>
+                            <th>Seats (Enrolled / Cap)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-sections-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: STUDENTS -->
+    <div id="tab-admin-students" class="tab-pane">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 700;">Student Directory &amp; Accounts</h3>
+                <button class="btn btn-primary btn-sm" onclick="openModal('create-student-modal')">
+                    + Register Student
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Full Name</th>
+                            <th>Department</th>
+                            <th>Credits Earned</th>
+                            <th>Portal Username</th>
+                            <th>Email Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-students-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: INSTRUCTORS -->
+    <div id="tab-admin-instructors" class="tab-pane">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 700;">Faculty Directory</h3>
+                <button class="btn btn-primary btn-sm" onclick="openModal('create-instructor-modal')">
+                    + Add Faculty Member
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Faculty ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Salary</th>
+                            <th>Portal Username</th>
+                            <th>Email Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-instructors-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: DEPARTMENTS -->
+    <div id="tab-admin-departments" class="tab-pane">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 700;">Academic Departments</h3>
+                <button class="btn btn-primary btn-sm" onclick="openModal('create-dept-modal')">
+                    + Add Department
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Department Name</th>
+                            <th>Building</th>
+                            <th>Annual Budget</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-departments-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================
+         MODALS FOR ADMIN ACTIONS
+         ============================================================== -->
+
+    <!-- MODAL 1: ADD COURSE -->
+    <div id="create-course-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Course</h3>
+                <button class="modal-close" onclick="closeModal('create-course-modal')">&times;</button>
+            </div>
+            <form id="form-create-course" onsubmit="handleCreateCourse(event)">
+                <div class="form-group">
+                    <label class="form-label">Course Code (e.g. CS205)</label>
+                    <input type="text" id="new-course-id" class="form-control" required placeholder="CS205">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Course Title</label>
+                    <input type="text" id="new-course-title" class="form-control" required placeholder="Computer Networks">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <select id="new-course-dept" class="form-control select-dept-populate" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Credits (1 - 10)</label>
+                    <input type="number" id="new-course-credits" class="form-control" value="3" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Prerequisites</label>
+                    <div id="prereq-options-container" style="max-height: 120px; overflow-y: auto; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);"></div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('create-course-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: SCHEDULE SECTION -->
+    <div id="create-section-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Schedule Course Section</h3>
+                <button class="modal-close" onclick="closeModal('create-section-modal')">&times;</button>
+            </div>
+            <form id="form-create-section" onsubmit="handleCreateSection(event)">
+                <div class="form-group">
+                    <label class="form-label">Course</label>
+                    <select id="new-section-course" class="form-control select-course-populate" required></select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Section ID (e.g. SEC01)</label>
+                        <input type="text" id="new-section-code" class="form-control" value="SEC01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Capacity (Max Seats)</label>
+                        <input type="number" id="new-section-capacity" class="form-control" value="35" min="1" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Semester</label>
+                        <select id="new-section-semester" class="form-control">
+                            <option value="Fall" selected>Fall</option>
+                            <option value="Spring">Spring</option>
+                            <option value="Summer">Summer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Year</label>
+                        <input type="number" id="new-section-year" class="form-control" value="2026" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Classroom</label>
+                    <select id="new-section-room" class="form-control select-room-populate" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Meeting Time Slot</label>
+                    <select id="new-section-timeslot" class="form-control select-timeslot-populate" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Assign Faculty Instructor</label>
+                    <select id="new-section-instructor" class="form-control select-inst-populate"></select>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('create-section-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Schedule Section</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: ADD STUDENT -->
+    <div id="create-student-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Register Student</h3>
+                <button class="modal-close" onclick="closeModal('create-student-modal')">&times;</button>
+            </div>
+            <form id="form-create-student" onsubmit="handleCreateStudent(event)">
+                <div class="form-group">
+                    <label class="form-label">Student ID (e.g. S1040)</label>
+                    <input type="text" id="new-student-id" class="form-control" placeholder="S1040" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="new-student-name" class="form-control" placeholder="Jane Doe" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <select id="new-student-dept" class="form-control select-dept-populate" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Portal Login Username</label>
+                    <input type="text" id="new-student-username" class="form-control" placeholder="stud_jane" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Initial Password (Default: pass123)</label>
+                    <input type="password" id="new-student-password" class="form-control" placeholder="pass123">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('create-student-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Register Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ADD INSTRUCTOR -->
+    <div id="create-instructor-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Faculty Member</h3>
+                <button class="modal-close" onclick="closeModal('create-instructor-modal')">&times;</button>
+            </div>
+            <form id="form-create-instructor" onsubmit="handleCreateInstructor(event)">
+                <div class="form-group">
+                    <label class="form-label">Faculty ID (e.g. INS15)</label>
+                    <input type="text" id="new-inst-id" class="form-control" placeholder="INS15" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="new-inst-name" class="form-control" placeholder="Dr. John von Neumann" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <select id="new-inst-dept" class="form-control select-dept-populate" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Annual Salary ($)</label>
+                    <input type="number" id="new-inst-salary" class="form-control" value="95000.00" step="1000" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Portal Username</label>
+                    <input type="text" id="new-inst-username" class="form-control" placeholder="inst_neumann" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Initial Password (Default: teach123)</label>
+                    <input type="password" id="new-inst-password" class="form-control" placeholder="teach123">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('create-instructor-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Faculty</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 5: ADD DEPARTMENT -->
+    <div id="create-dept-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Department</h3>
+                <button class="modal-close" onclick="closeModal('create-dept-modal')">&times;</button>
+            </div>
+            <form id="form-create-dept" onsubmit="handleCreateDepartment(event)">
+                <div class="form-group">
+                    <label class="form-label">Department Name</label>
+                    <input type="text" id="new-dept-name" class="form-control" placeholder="Civil Engineering" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Building Location</label>
+                    <input type="text" id="new-dept-bldg" class="form-control" placeholder="Smeaton Hall" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Annual Budget ($)</label>
+                    <input type="number" id="new-dept-budget" class="form-control" value="800000.00" step="50000" required>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('create-dept-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Department</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/admin.js' %}"></script>
+{% endblock %}

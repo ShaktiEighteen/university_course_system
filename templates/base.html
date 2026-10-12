@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}University Course Registration System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <a href="{% url 'dashboard_redirect' %}" class="nav-brand">
+            <div class="brand-icon">🎓</div>
+            <span>UniReg 3-Tier</span>
+        </a>
+
+        <div class="nav-actions">
+            {% if request.session.username %}
+            <div class="user-badge">
+                <span>👤 {{ request.session.username }}</span>
+                <span class="role-tag role-{{ request.session.role }}">{{ request.session.role }}</span>
+            </div>
+            {% endif %}
+
+            <button class="btn-icon" id="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <span id="theme-icon">🌙</span>
+            </button>
+
+            {% if request.session.username %}
+            <a href="{% url 'logout' %}" class="btn btn-secondary btn-sm" style="border-radius: var(--radius-sm);">
+                Sign Out
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary btn-sm">
+                Sign In
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Main View Container -->
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>Database Systems Lab Mini Project &bull; Strict 3-Tier Architecture &bull; PostgreSQL &amp; MySQL 3NF</div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

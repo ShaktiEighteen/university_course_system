@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Instructor Portal - Faculty Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="dashboard-title">
+            <h1>Faculty Portal: {{ instructor.name }}</h1>
+            <div class="dashboard-subtitle">
+                Faculty ID: <strong>{{ instructor.instructor_id }}</strong> &bull; Department: <strong>{{ instructor.department.dept_name }}</strong> &bull; Current Term: <strong>{{ current_semester }} {{ current_year }}</strong>
+            </div>
+        </div>
+        <div>
+            <span class="role-tag role-instructor" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+                Faculty Member
+            </span>
+        </div>
+    </div>
+
+    <!-- Assigned Sections Grid -->
+    <div style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem;">My Assigned Course Sections</h2>
+        <div id="instructor-sections-grid" class="course-grid">
+            <!-- Rendered by instructor.js -->
+        </div>
+    </div>
+
+    <!-- ROSTER & GRADE ENTRY MODAL -->
+    <div id="roster-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 750px;">
+            <div class="modal-header">
+                <h3 id="roster-modal-title" style="font-size: 1.25rem; font-weight: 700;">Section Roster</h3>
+                <button class="modal-close" onclick="closeModal('roster-modal')">&times;</button>
+            </div>
+            
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                View enrolled students, manage course attendance, and assign/update academic grades with instant database synchronization.
+            </p>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Department</th>
+                            <th>Final Grade</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roster-table-body">
+                        <!-- Rendered by instructor.js -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 1.5rem; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeModal('roster-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/instructor.js' %}"></script>
+{% endblock %}
