@@ -8,12 +8,11 @@ from apps.core.auth import login_user, logout_user, get_current_user, role_requi
 
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
-@csrf_exempt
 def index_view(request):
     user = get_current_user(request)
     if user:
         return redirect('dashboard_redirect')
-    return render(request, 'index.html')
+    return redirect('login')
 
 
 @csrf_exempt
@@ -52,9 +51,9 @@ def login_view(request):
 
         if request.content_type == 'application/json' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'error': err_msg}, status=401)
-        return render(request, 'index.html', {'error': err_msg})
+        return render(request, 'login.html', {'error': err_msg})
 
-    return render(request, 'index.html')
+    return render(request, 'login.html')
 
 
 def logout_view(request):
