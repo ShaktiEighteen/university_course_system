@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Course Registration and Management System</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <style>
+        .hero-section {
+            text-align: center;
+            padding: 3rem 1rem 2rem 1rem;
+        }
+        .hero-badge {
+            display: inline-flex;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0.35rem 0.85rem;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <a href="index.html" class="nav-brand">
+            <div class="brand-icon">🎓</div>
+            <span>UniReg 3-Tier</span>
+        </a>
+
+        <div class="nav-actions">
+            <button class="btn-icon" id="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <span id="theme-icon">🌙</span>
+            </button>
+            <a href="http://127.0.0.1:8000/login/" class="btn btn-primary btn-sm">
+                Open Running Server
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <div style="max-width: 960px; margin: 0 auto;">
+            <!-- Hero -->
+            <div class="hero-section">
+                <div class="hero-badge">
+                    <span>⚡ DBS Lab Mini Project</span> &bull; <span>Strict 3-Tier Architecture</span>
+                </div>
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem; letter-spacing: -0.02em;">
+                    University Course Registration &amp; Management System
+                </h1>
+                <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+                    A comprehensive, relational database system enforcing ACID transaction rules, role-based access control, and dynamic client-side rendering.
+                </p>
+
+                <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap;">
+                    <span class="role-tag" style="background: #e0e7ff; color: #3730a3; padding: 0.4rem 0.85rem;">
+                        Tier 1: Presentation (Browser / Vanilla JS / Dynamic AJAX)
+                    </span>
+                    <span class="role-tag" style="background: #dbeafe; color: #1e40af; padding: 0.4rem 0.85rem;">
+                        Tier 2: Application (Django REST API / ACID Logic Engine)
+                    </span>
+                    <span class="role-tag" style="background: #dcfce7; color: #166534; padding: 0.4rem 0.85rem;">
+                        Tier 3: Relational Data (PostgreSQL &amp; MySQL 3NF)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Two-Column Grid: Sign-In Portal & Live Highlights -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; margin-top: 1rem;">
+                <!-- Left: Portal Access Form -->
+                <div class="card" style="padding: 2.25rem;">
+                    <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.35rem;">Portal Sign In</h2>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        Connect to the live application using your credentials or 1-click demo logins.
+                    </p>
+
+                    <form action="http://127.0.0.1:8000/login/" method="POST">
+                        <div class="form-group">
+                            <label class="form-label" for="username">Username</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" value="stud_cs01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" value="pass123" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem; margin-top: 0.5rem;">
+                            Sign In to Portal →
+                        </button>
+                    </form>
+
+                    <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color);">
+                        <div style="font-size: 0.775rem; text-align: center; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.85rem;">
+                            Quick 1-Click Demo Logins
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('stud_cs01', 'pass123')" style="justify-content: flex-start;">
+                                <span class="role-tag role-student">Student</span> 
+                                <span>Alice Johnson (<code>stud_cs01</code> / <code>pass123</code>)</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('inst_cs101', 'teach123')" style="justify-content: flex-start;">
+                                <span class="role-tag role-instructor">Faculty</span> 
+                                <span>Dr. Alan Turing (<code>inst_cs101</code> / <code>teach123</code>)</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('admin', 'admin123')" style="justify-content: flex-start;">
+                                <span class="role-tag role-admin">Admin</span> 
+                                <span>System Administrator (<code>admin</code> / <code>admin123</code>)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Rules & Specs -->
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="card" style="padding: 1.75rem;">
+                        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--primary);">
+                            🔒 ACID Transactional Rules
+                        </h3>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+                            All registration operations run in <code>transaction.atomic()</code> with row-level locks (<code>select_for_update()</code>):
+                        </p>
+                        <ul style="margin: 0.75rem 0 0 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;">
+                            <li><strong>Prerequisites Check</strong>: Enforces passed prerequisites.</li>
+                            <li><strong>Time Slot Clash Guard</strong>: Prevents schedule conflicts.</li>
+                            <li><strong>Capacity Cap</strong>: Rejects registration on full sections.</li>
+                            <li><strong>Semester Credit Limit</strong>: Max 18 credits per term.</li>
+                            <li><strong>No Double Registrations</strong>: Duplicate blocks in same term.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 1.75rem;">
+                        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--success);">
+                            📊 3NF Relational Database Pre-Seeded
+                        </h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.875rem;">
+                            <div style="background: var(--bg-hover); padding: 0.65rem; border-radius: 6px;">
+                                <strong>5</strong> Departments
+                            </div>
+                            <div style="background: var(--bg-hover); padding: 0.65rem; border-radius: 6px;">
+                                <strong>17</strong> Courses &amp; Prereqs
+                            </div>
+                            <div style="background: var(--bg-hover); padding: 0.65rem; border-radius: 6px;">
+                                <strong>10</strong> Faculty Members
+                            </div>
+                            <div style="background: var(--bg-hover); padding: 0.65rem; border-radius: 6px;">
+                                <strong>32</strong> Enrolled Students
+                            </div>
+                            <div style="background: var(--bg-hover); padding: 0.65rem; border-radius: 6px;">
+                                <strong>22</strong> Active Sections
+                            </div>
+                            <div style="background: var(--bg-hover); padding: 0.65rem; border-radius: 6px;">
+                                <strong>10</strong> Lab SQL Queries
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Global Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>Database Systems Lab Mini Project &bull; Strict 3-Tier Architecture &bull; Entry File: index.html</div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="static/js/main.js"></script>
+    <script>
+        function fillCreds(u, p) {
+            document.getElementById('username').value = u;
+            document.getElementById('password').value = p;
+            showToast('Credentials filled for ' + u, 'info');
+        }
+    </script>
+</body>
+</html>
