@@ -8,18 +8,15 @@ from apps.core.auth import login_user, logout_user, get_current_user, role_requi
 
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
+@ensure_csrf_cookie
 def index_view(request):
-    user = get_current_user(request)
-    if user:
-        return redirect('dashboard_redirect')
-    return redirect('login')
+    return render(request, 'react_app.html')
 
 
 @csrf_exempt
 def login_view(request):
-    user = get_current_user(request)
-    if user:
-        return redirect('dashboard_redirect')
+    if request.method == 'GET':
+        return render(request, 'react_app.html')
 
     if request.method == 'POST':
         # Accept form-encoded or JSON payload
@@ -38,12 +35,10 @@ def login_view(request):
             account = UserAccount.objects.get(username=username, is_active=True)
             if account.check_password(password):
                 login_user(request, account)
-                redirect_url = '/student/dashboard/' if account.role == 'student' else (
-                    '/instructor/dashboard/' if account.role == 'instructor' else '/admin-portal/'
-                )
+                redirect_url = '/'
                 if request.content_type == 'application/json' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    return JsonResponse({'success': True, 'redirect_url': redirect_url, 'role': account.role})
-                return redirect(redirect_url)
+                    return JsonResponse({'success': True, 'redirect_url': redirect_url, 'role': account.role, 'username': account.username})
+                return redirect('/')
             else:
                 err_msg = 'Invalid username or password.'
         except UserAccount.DoesNotExist:
@@ -51,61 +46,33 @@ def login_view(request):
 
         if request.content_type == 'application/json' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'error': err_msg}, status=401)
-        return render(request, 'login.html', {'error': err_msg})
+        return render(request, 'react_app.html', {'error': err_msg})
 
-    return render(request, 'login.html')
+    return render(request, 'react_app.html')
 
 
+@csrf_exempt
 def logout_view(request):
     logout_user(request)
-    return redirect('login')
+    if request.content_type == 'application/json' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True, 'message': 'Logged out successfully.'})
+    return redirect('/')
 
 
 def dashboard_redirect_view(request):
-    user = get_current_user(request)
-    if not user:
-        return redirect('login')
-    if user.role == 'student':
-        return redirect('student_dashboard')
-    elif user.role == 'instructor':
-        return redirect('instructor_dashboard')
-    elif user.role == 'admin':
-        return redirect('admin_dashboard')
-    return redirect('login')
+    return redirect('/')
 
 
-@role_required(['student'])
 def student_dashboard_view(request):
-    departments = Department.objects.all()
-    context = {
-        'student': request.student,
-        'user': request.user_account,
-        'departments': departments,
-        'current_semester': getattr(settings, 'DEFAULT_SEMESTER', 'Fall'),
-        'current_year': getattr(settings, 'DEFAULT_YEAR', 2026),
-    }
-    return render(request, 'student_dashboard.html', context)
+    return render(request, 'react_app.html')
 
 
-@role_required(['instructor'])
 def instructor_dashboard_view(request):
-    context = {
-        'instructor': request.instructor,
-        'user': request.user_account,
-        'current_semester': getattr(settings, 'DEFAULT_SEMESTER', 'Fall'),
-        'current_year': getattr(settings, 'DEFAULT_YEAR', 2026),
-    }
-    return render(request, 'instructor_dashboard.html', context)
+    return render(request, 'react_app.html')
 
 
-@role_required(['admin'])
 def admin_dashboard_view(request):
-    context = {
-        'user': request.user_account,
-        'current_semester': getattr(settings, 'DEFAULT_SEMESTER', 'Fall'),
-        'current_year': getattr(settings, 'DEFAULT_YEAR', 2026),
-    }
-    return render(request, 'admin_dashboard.html', context)
+    return render(request, 'react_app.html')
 
 
 @require_http_methods(['GET'])

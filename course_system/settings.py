@@ -11,6 +11,15 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-university-course-mgmt-key-replace-in-prod')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.trycloudflare.com',
+    'http://*.trycloudflare.com',
+    'https://*.localtunnel.me',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+]
 
 # Application definition
 INSTALLED_APPS = [

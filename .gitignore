@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# Environment Variables
+.env
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Binaries & Executables
+cloudflared.exe
+*.exe
+
+# Java & Maven Build
+java-version/target/
+*.class
+*.war
+*.jar
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
