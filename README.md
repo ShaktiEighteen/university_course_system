@@ -1,6 +1,13 @@
 # University Course Registration & Management System
 > **DBS (Database Systems) Lab Mini Project**  
-> Strict Three-Tier Architecture: Presentation (Browser) &rarr; Application (Business Logic) &rarr; Data (Relational DB in 3NF)
+> Strict Three-Tier Architecture: Presentation (React 18 + Tailwind) &rarr; Application (Django 5.2 Business Logic) &rarr; Data (Relational DB in 3NF)
+
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/Django-5.2-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Database](https://img.shields.io/badge/RDBMS-3NF_PostgreSQL%2FMySQL%2FSQLite-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Deploy](https://img.shields.io/badge/Deploy-Render_Ready-46E3B7?logo=render&logoColor=white)](https://render.com/)
 
 ---
 
@@ -11,17 +18,18 @@ The system strictly follows a clean **Three-Tier Architecture**:
 ```
 +-----------------------------------------------------------------------+
 |                       1. PRESENTATION TIER                            |
-|  - HTML5, CSS3, Modern Vanilla JavaScript (No heavy frameworks)      |
-|  - Client-side AJAX/Fetch dynamic rendering & DOM updates             |
-|  - Real-time seat counters, timetable grids, grade entry, toast alerts |
-|  - Light / Dark theme toggle with localStorage persistence            |
+|  - Modern React 18 SPA + Vite + Tailwind CSS + Lucide Icons           |
+|  - Real-time seat meters, interactive visual weekly timetable grid    |
+|  - Role-based responsive dashboards: Student, Instructor, Admin        |
+|  - Humanized greetings, live credit gauges, toast notifications        |
+|  - Served with high performance via WhiteNoise static storage         |
 +-----------------------------------------------------------------------+
                                    ▲
                                    │ JSON API / HTTP REST
                                    ▼
 +-----------------------------------------------------------------------+
 |                       2. APPLICATION TIER                             |
-|  - Primary: Python 3.11 with Django 5.2 (REST JSON + Views)           |
+|  - Primary: Python 3.11 with Django 5.2 (REST JSON + Gunicorn)         |
 |  - Alternate: Java Servlets + JSP (Maven, Tomcat, JDBC) in /java-ver  |
 |  - Role-Based Access Control (RBAC): Student, Instructor, Admin       |
 |  - ACID Transactional Business Rules Engine (Row Locks, Rollbacks)    |
@@ -33,7 +41,7 @@ The system strictly follows a clean **Three-Tier Architecture**:
 +-----------------------------------------------------------------------+
 |                          3. DATA TIER                                 |
 |  - Strict 3NF Relational Database Schema                              |
-|  - PostgreSQL (Primary) / MySQL / SQLite (Immediate Out-of-the-Box)   |
+|  - PostgreSQL (Production) / MySQL / SQLite (Zero-Setup Fallback)     |
 |  - Referential integrity: ON DELETE / ON UPDATE CASCADE / RESTRICT    |
 |  - CHECK constraints (credits > 0, capacity > 0, budget >= 0)         |
 |  - Optimized Composite Indexes & Stored Views                         |
@@ -289,7 +297,19 @@ Open **`http://localhost:8000/`** in your browser.
 
 ---
 
-## 7. Alternate Java Backend (`/java-version`)
+## 7. Permanent Production Deployment (Render Free Tier)
+
+This repository includes a ready-to-deploy [`render.yaml`](render.yaml) blueprint:
+
+1. Push this repository to GitHub.
+2. Sign in to your [Render Dashboard](https://dashboard.render.com/).
+3. Click **New +** &rarr; **Blueprint**.
+4. Select `university_course_system`.
+5. Render will automatically build the service, run migrations, seed data, compress static files with WhiteNoise, and launch with Gunicorn on an active HTTPS domain.
+
+---
+
+## 8. Alternate Java Backend (`/java-version`)
 
 Located in `java-version/`, this backend implements identical features:
 - **Maven & Jakarta Servlets 6.0**: `AuthServlet`, `CourseServlet`, `RegistrationServlet`, `InstructorServlet`
