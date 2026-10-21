@@ -12,6 +12,9 @@ ENV/
 # Environment Variables
 .env
 
+# Collected Static Files
+staticfiles/
+
 # Node & Frontend
 node_modules/
 frontend/node_modules/
