@@ -10,10 +10,10 @@ from apps.registration.services import register_student_for_section, drop_studen
 from django.views.decorators.csrf import csrf_exempt
 
 GRADE_POINTS = {
-    'A+': 4.0, 'A': 4.0, 'A-': 3.7,
-    'B+': 3.3, 'B': 3.0, 'B-': 2.7,
-    'C+': 2.3, 'C': 2.0, 'C-': 1.7,
-    'D': 1.0,  'F': 0.0
+    'A+': 10.0, 'A': 9.0, 'A-': 8.5,
+    'B+': 8.0,  'B': 7.0, 'B-': 6.5,
+    'C+': 6.0,  'C': 5.5, 'C-': 5.0,
+    'D': 4.0,   'F': 0.0
 }
 
 @csrf_exempt
@@ -170,8 +170,12 @@ def api_student_grades(request):
     return JsonResponse({
         'success': True,
         'cgpa': cgpa,
+        'gpa': cgpa,
+        'scale': 10.0,
         'total_earned_credits': earned_credits,
-        'records': history
+        'total_credits_earned': earned_credits,
+        'records': history,
+        'history': history
     })
 
 

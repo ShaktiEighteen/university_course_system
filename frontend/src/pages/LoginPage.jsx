@@ -18,7 +18,7 @@ const DEMO_ACCOUNTS = [
     label: 'Alice Johnson (CS Student)',
     username: 'stud_cs01',
     password: 'pass123',
-    desc: 'Self-register for courses, inspect real-time seat counts, view weekly schedule & GPA transcript.',
+    desc: 'Self-register for courses, inspect real-time seat counts, view weekly schedule & 10-point GPA transcript.',
     badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
   },
   {

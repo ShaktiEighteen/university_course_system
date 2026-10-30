@@ -28,7 +28,7 @@ export default function StudentDashboard({ currentUser, showToast }) {
   const [sections, setSections] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [timetable, setTimetable] = useState({ schedule: [], total_credits: 0, max_credits: 18 });
-  const [grades, setGrades] = useState({ history: [], gpa: 0, total_credits_earned: 0 });
+  const [grades, setGrades] = useState({ history: [], gpa: 0, cgpa: 0, total_credits_earned: 0 });
   const [loading, setLoading] = useState(true);
   const [actionLoadingId, setActionLoadingId] = useState(null);
 
@@ -223,7 +223,7 @@ export default function StudentDashboard({ currentUser, showToast }) {
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
           }`}
         >
-          <Award className="w-4 h-4" /> Grades & Transcript ({grades.gpa ? grades.gpa.toFixed(2) : '3.82'} GPA)
+          <Award className="w-4 h-4" /> Grades & Transcript ({grades.gpa ? grades.gpa.toFixed(2) : (grades.cgpa ? grades.cgpa.toFixed(2) : '8.75')} / 10 CGPA)
         </button>
       </div>
 
@@ -501,12 +501,12 @@ export default function StudentDashboard({ currentUser, showToast }) {
           {/* GPA Summary Stat Card */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Cumulative GPA</span>
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Cumulative CGPA (10.0 Scale)</span>
               <div className="text-3xl font-extrabold text-white mt-1">
-                {grades.gpa ? grades.gpa.toFixed(2) : '3.82'}
+                {grades.gpa ? grades.gpa.toFixed(2) : (grades.cgpa ? grades.cgpa.toFixed(2) : '8.75')} <span className="text-lg text-slate-400 font-normal">/ 10</span>
               </div>
               <span className="text-[11px] text-emerald-400 mt-1 inline-flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" /> Good Academic Standing
+                <CheckCircle2 className="w-3 h-3" /> Excellent Academic Standing
               </span>
             </div>
 
@@ -540,6 +540,7 @@ export default function StudentDashboard({ currentUser, showToast }) {
                   <th className="py-3 px-4">Title</th>
                   <th className="py-3 px-4">Term</th>
                   <th className="py-3 px-4">Credits</th>
+                  <th className="py-3 px-4 text-center">Grade Points (10.0)</th>
                   <th className="py-3 px-4 text-right">Grade</th>
                 </tr>
               </thead>
@@ -550,6 +551,9 @@ export default function StudentDashboard({ currentUser, showToast }) {
                     <td className="py-3.5 px-4 font-semibold text-slate-100">{item.title}</td>
                     <td className="py-3.5 px-4 text-slate-400">{item.semester} {item.year}</td>
                     <td className="py-3.5 px-4 font-mono">{item.credits}</td>
+                    <td className="py-3.5 px-4 text-center font-mono font-semibold text-indigo-300">
+                      {item.grade_point !== undefined && item.grade_point !== null ? `${item.grade_point.toFixed(1)} / 10` : '—'}
+                    </td>
                     <td className="py-3.5 px-4 text-right">
                       <span className={`px-2 py-0.5 rounded-md font-mono font-bold text-xs ${
                         item.grade === 'IP'

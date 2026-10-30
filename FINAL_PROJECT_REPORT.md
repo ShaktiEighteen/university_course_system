@@ -151,7 +151,7 @@ sequenceDiagram
     Engine->>DB: UPDATE takes SET grade='A'
     DB-->>Instructor: Grade recorded
     Student->>Engine: GET /api/student/grades/
-    Engine-->>Student: Shows CS201: Grade 'A' (4.0 GPA)
+    Engine-->>Student: Shows CS201: Grade 'A' (9.0 / 10 CGPA)
 ```
 
 ---
