@@ -204,6 +204,7 @@ def api_instructor_sections(request):
         sec = a.section
         enrolled_count = sec.takes_set.count()
         sections_data.append({
+            'id': sec.id,
             'section_pk': sec.id,
             'course_id': sec.course.course_id,
             'title': sec.course.title,
@@ -226,16 +227,22 @@ def api_instructor_sections(request):
 def api_instructor_roster(request, section_id):
     """
     Returns enrolled students roster for an assigned section.
+    Supports either integer primary key (e.g. 3) or section code string (e.g. 'SEC01').
     """
-    # Ensure current instructor teaches this section
-    is_authorized = Teaches.objects.filter(instructor=request.instructor, section_id=section_id).exists()
-    if not is_authorized:
-        return JsonResponse({'success': False, 'error': 'You are not assigned to teach this section.'}, status=403)
+    if str(section_id).isdigit():
+        sec_filter = {'id': int(section_id)}
+    else:
+        sec_filter = {'section_id': str(section_id), 'teaches__instructor': request.instructor}
 
     try:
-        section = Section.objects.select_related('course').get(id=section_id)
-    except Section.DoesNotExist:
+        section = Section.objects.select_related('course').get(**sec_filter)
+    except (Section.DoesNotExist, Section.MultipleObjectsReturned):
         return JsonResponse({'success': False, 'error': 'Section not found.'}, status=404)
+
+    # Ensure current instructor teaches this section
+    is_authorized = Teaches.objects.filter(instructor=request.instructor, section=section).exists()
+    if not is_authorized:
+        return JsonResponse({'success': False, 'error': 'You are not assigned to teach this section.'}, status=403)
 
     roster = (
         Takes.objects
@@ -260,7 +267,8 @@ def api_instructor_roster(request, section_id):
         'course_id': section.course.course_id,
         'title': section.course.title,
         'section_id': section.section_id,
-        'students': students_list
+        'students': students_list,
+        'roster': students_list
     })
 
 
@@ -272,13 +280,23 @@ def api_instructor_update_grade(request):
     Updates student grade for an assigned section.
     """
     data = json.loads(request.body)
-    section_id = int(data.get('section_id'))
+    raw_sec = data.get('section_id')
     student_id = data.get('student_id', '').strip()
     new_grade = data.get('grade', '').strip().upper()
 
     valid_grades = [choice[0] for choice in Takes.GRADE_CHOICES]
     if new_grade not in valid_grades:
         return JsonResponse({'success': False, 'error': f"Invalid grade. Allowed grades: {', '.join(valid_grades)}"}, status=400)
+
+    if str(raw_sec).isdigit():
+        sec = Section.objects.filter(id=int(raw_sec)).first()
+    else:
+        sec = Section.objects.filter(section_id=str(raw_sec), teaches__instructor=request.instructor).first()
+
+    if not sec:
+        return JsonResponse({'success': False, 'error': 'Section not found.'}, status=404)
+
+    section_id = sec.id
 
     # Check instructor authorization
     if not Teaches.objects.filter(instructor=request.instructor, section_id=section_id).exists():

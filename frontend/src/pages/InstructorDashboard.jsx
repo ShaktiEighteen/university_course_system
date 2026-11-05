@@ -45,9 +45,10 @@ export default function InstructorDashboard({ currentUser, showToast }) {
     setSelectedSection(section);
     setRosterLoading(true);
     try {
-      const res = await api.getInstructorRoster(section.id || section.section_id);
+      const secIdentifier = section.id || section.section_pk || section.section_id;
+      const res = await api.getInstructorRoster(secIdentifier);
       if (res.success) {
-        setRoster(res.roster || []);
+        setRoster(res.roster || res.students || []);
       }
     } catch (err) {
       showToast(err.message || 'Failed to load class roster.', 'error');
@@ -60,7 +61,8 @@ export default function InstructorDashboard({ currentUser, showToast }) {
     if (!selectedSection) return;
     setGradeSubmittingId(studentId);
     try {
-      const res = await api.updateGrade(studentId, selectedSection.id || selectedSection.section_id, newGrade);
+      const secIdentifier = selectedSection.id || selectedSection.section_pk || selectedSection.section_id;
+      const res = await api.updateGrade(studentId, secIdentifier, newGrade);
       if (res.success) {
         showToast(`Grade updated to "${newGrade}" for student ${studentId}`, 'success');
         // Update local roster state

@@ -10,6 +10,6 @@ urlpatterns = [
 
     # Instructor endpoints
     path('api/instructor/sections/', views.api_instructor_sections, name='api_instructor_sections'),
-    path('api/instructor/roster/<int:section_id>/', views.api_instructor_roster, name='api_instructor_roster'),
+    path('api/instructor/roster/<str:section_id>/', views.api_instructor_roster, name='api_instructor_roster'),
     path('api/instructor/grade/', views.api_instructor_update_grade, name='api_instructor_update_grade'),
 ]
